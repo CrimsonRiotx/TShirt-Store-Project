@@ -1,0 +1,208 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+    id 'com.github.spotbugs' version '4.6.2'
+    id 'checkstyle'
+}
+
+repositories {
+    mavenCentral()
+}
+
+defaultTasks 'clean', 'build'
+
+def asnlibPath = System.getenv("ASNLIB")
+
+// If $ASNLIB isn't set, we're either working in the Vocareum IntelliJ Container
+// or working on an activity locally. Handle both cases to set the correct path for asnlib.
+if (!asnlibPath) {
+    // Vocareum sets the path for $ASNLIB to be rooted at /voc in the IntelliJ Container
+    def asnlibContainerDirectoryPath = '/voc'
+    def asnlibContainerDirectory = new File(asnlibContainerDirectoryPath)
+    if (asnlibContainerDirectory.exists()) {
+        asnlibPath = asnlibContainerDirectoryPath
+    } else {
+        // Working on developing an activity locally, adopt same pattern as for Prereq activities
+        asnlibPath = '../../asnlib'
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['../src/main/java', asnlibPath + '/public/src/readonly-main/java']
+        }
+        resources {
+            srcDirs = ['../src/main/resources', asnlibPath + '/public/src/main/resources']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['../src/test/java', asnlibPath + '/public/src/readonly-test/java',
+                       asnlibPath + '/public/src/readonly-integrationTest/java']
+        }
+        resources {
+            srcDirs = ['../src/test/resources', asnlibPath + '/public/src/test/resources']
+        }
+    }
+}
+
+dependencies {
+
+    implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    implementation 'com.google.code.findbugs:jsr305:2.0.3'
+    implementation 'com.google.code.findbugs:annotations:2.0.3'
+    implementation 'commons-io:commons-io:2.5'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+/*
+ Custom task for running 'assemble' task. This provides a more friendly name for assemble.
+ */
+tasks.register("compile") {
+    dependsOn assemble
+}
+
+/*
+ Custom task for running 'check' task. The presence of this task in the taskGraph is used to turn on failures.
+ */
+tasks.register("staticchecks") {
+    dependsOn check
+    group = 'Verification'
+    description = 'Runs check, ensuring failures for spotbugs, and checkstyle.'
+}
+
+/*
+ Applies Checkstyle plugin quality checks on project's Java source files and
+ generates reports from these checks.
+*/
+checkstyle {
+    configFile = file(asnlibPath + '/public/ATACheckstyle/checkstyle/checkstyle.xml')
+    configProperties = [
+            'checkstyle.suppression.filter': file(asnlibPath + '/public/ATACheckstyle/checkstyle/prereq/suppressions.xml')
+    ]
+    sourceSets = [sourceSets.main]
+}
+
+/*
+ If we are running the task 'staticchecks', do not ignore failures, otherwise ignore
+ */
+checkstyleMain.doFirst {
+    ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
+}
+
+/*
+ If we are running the task 'staticchecks', ignore test failures, otherwise fail.
+ */
+test.doFirst {
+    ignoreFailures = gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
+}
+
+/*
+ If we are running the task 'staticchecks', do not ignore failures, otherwise ignore
+ */
+spotbugsMain.doFirst {
+    ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
+}
+
+/*
+ Only run spotbugs on source code
+ */
+spotbugsTest.enabled = false
+
+/*
+ Don't use the cached results of the spotbugs task in case the build task was just run.
+ With cached results you may get false positives.
+ */
+spotbugsMain.outputs.upToDateWhen { false }
+
+test {
+    // Use junit platform for unit tests
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat "full"
+    }
+}
+/*
+ Define a workflow name and the list of test classes it should run
+ */
+def wflowToTestsMap = [
+        'step-00' : ['com.ata.stepzero.GitVerificationStepZeroTest'],
+        'step-01' : ['com.ata.stepone.ShopRunnerStepOneIntegrationTest'],
+        'step-02' : ['com.ata.steptwo.ShopRunnerStepTwoIntegrationTest'],
+        'step-03' : ['com.ata.stepthree.ShopRunnerStepThreeIntegrationTest'],
+        'step-04' : ['com.ata.stepfour.ShopRunnerStepFourIntegrationTest'],
+        'step-05' : ['com.ata.stepfive.ShopRunnerStepFiveIntegrationTest'],
+        'step-06' : ['com.ata.stepsix.ShopRunnerStepSixIntegrationTest'],
+        'step-07' : ['com.ata.stepseven.ShopRunnerStepSevenIntegrationTest'],
+        'step-08' : ['com.ata.stepseven.ShopRunnerStepEightIntrospectionTest'],
+        'test-all': []
+]
+
+/*
+ Define a workflow's dependent steps
+ */
+def wflowDependencies = [
+        'step-01' : ['step-00'],
+        'step-02' : ['step-01'],
+        'step-03' : ['step-02'],
+        'step-04' : ['step-03'],
+        'step-05' : ['step-04'],
+        'step-06' : ['step-05'],
+        'step-07' : ['step-06'],
+        'step-08' : ['step-07'],
+        'test-all': ['step-08']
+]
+
+/*
+ Create a Gradle task for each workflow
+ */
+wflowToTestsMap.forEach { wflowName, testList ->
+    tasks.register(wflowName) {
+        dependsOn wflowtest
+        def dependentWflows = wflowDependencies[wflowName]
+        if (dependentWflows != null && !dependentWflows.isEmpty()) {
+            for (dependentWflow in dependentWflows) {
+                dependsOn dependentWflow
+            }
+        }
+        test.doFirst {
+            filter {
+                testList.each { includeTestsMatching it }
+            }
+        }
+    }
+}
+
+/*
+ Define a workflow name and the class containing the main method it should run
+ The run button will be connected to the workflow named 'run'
+ */
+def wflowToMainClassMap = [
+    'run': 'com.ata.ShopRunner'
+]
+
+wflowToMainClassMap.forEach { wflowName, mainClass ->
+    tasks.register(wflowName) {
+        runMain.mainClass.set(mainClass)
+        dependsOn runMain
+    }
+}
+
+tasks.register("runMain", JavaExec) {
+    description = "Run the main class with JavaExecTask"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = findProperty("mainClass")
+    // Connect standard in so that classes run from main() can provide user input
+    standardInput = System.in
+    group = "Execution"
+}
+
+tasks.register("wflowtest") {
+    dependsOn test
+    group = 'Verification'
+}
