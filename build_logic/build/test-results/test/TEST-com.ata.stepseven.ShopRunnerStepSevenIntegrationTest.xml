@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2022-11-01T22:03:08" hostname="ip-172-31-31-94" time="0.167">
+  <properties/>
+  <testcase name="main_selectBuyProductInvalidProductSelected_printsProductNotFoundMessage()" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.041"/>
+  <testcase name="main_selectShowCartAfterInvalidProductAddedToCart_printsEmptyCartMessage()" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.006"/>
+  <testcase name="[1] 0, Crew Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.018"/>
+  <testcase name="[2] 1, V-Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[3] 2, Polo" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[4] 3, Boat Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[5] 4, Tank Top" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="main_selectCheckoutWithEmptyCart_printsEmptyCartMessage()" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="main_selectShowCartWhenCartEmpty_printsEmptyCartMessage()" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[1] 0, Crew Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.006"/>
+  <testcase name="[2] 1, V-Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.004"/>
+  <testcase name="[3] 2, Polo" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[4] 3, Boat Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[5] 4, Tank Top" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[1] 0, Crew Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.004"/>
+  <testcase name="[2] 1, V-Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[3] 2, Polo" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[4] 3, Boat Neck" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <testcase name="[5] 4, Tank Top" classname="com.ata.stepseven.ShopRunnerStepSevenIntegrationTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

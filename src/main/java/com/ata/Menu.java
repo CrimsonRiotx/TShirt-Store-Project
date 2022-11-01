@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Menu {
     private String[] menuOptions = {"Exit", "List Products", "Buy Product", "Find Product", "Show Cart", "Checkout"};
-    private Cart cart;
+    private Cart cart = new Cart();
     private Scanner scanner;
     public Shop shop;
 
@@ -23,9 +23,10 @@ public class Menu {
      * be configured outside this class and for basic inversion of control.
      * @param scanner takes in a Scanner object to initialize
      */
-    public Menu(Scanner scanner, Shop shop) {
+    public Menu(Scanner scanner, Shop shop, Cart cart) {
         this.scanner = scanner;
         this.shop = shop;
+        this.cart = cart;
     }
 
 
@@ -44,13 +45,17 @@ public class Menu {
         }
         
         if(nextInt == 2){
-            System.out.println("Please enter the ID of the product you would like to purchase: ");
-            int idSearch = getNextIntFromUser();
-            if(idSearch < 0 || idSearch > 5){
+            System.out.println("Please enter the ID of the product you would like to purchase:");
+            int id = getNextIntFromUser();
+            if(id < 0 || id > 5){
                 System.out.println("That item ID is invalid and could not be added to the cart.");
-            } else {
-            Product p = shop.getProductByID(idSearch);
+            executeMenu();
+            }else {
+            Product p = shop.getProductByID(id);
             cart.addItem(p);
+            System.out.println(p.getName() + " has been added to your cart.");
+            
+            executeMenu();
            }
         }
         
@@ -66,6 +71,12 @@ public class Menu {
         
         if(nextInt == 4){
             cart.showDetails();
+            executeMenu();
+        }
+        
+        if(nextInt == 5){
+            cart.checkout();
+            executeMenu();
         }
         
         if(nextInt == 0){

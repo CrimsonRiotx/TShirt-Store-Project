@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ata.stepone.ShopRunnerStepOneIntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-11-01T22:03:08" hostname="ip-172-31-31-94" time="0.002">
+  <properties/>
+  <testcase name="main_provideShopperNameAndSelectExit_exits()" classname="com.ata.stepone.ShopRunnerStepOneIntegrationTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

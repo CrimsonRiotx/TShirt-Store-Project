@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ata.stepthree.ShopRunnerStepThreeIntegrationTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-11-01T22:03:08" hostname="ip-172-31-31-94" time="0.014">
+  <properties/>
+  <testcase name="main_selectListProducts_printsProductsAndExits()" classname="com.ata.stepthree.ShopRunnerStepThreeIntegrationTest" time="0.001"/>
+  <testcase name="[1] Crew Neck, Crew Neck was found and its product id is 0" classname="com.ata.stepthree.ShopRunnerStepThreeIntegrationTest" time="0.002"/>
+  <testcase name="[2] V-Neck, V-Neck was found and its product id is 1" classname="com.ata.stepthree.ShopRunnerStepThreeIntegrationTest" time="0.002"/>
+  <testcase name="[3] Polo, Polo was found and its product id is 2" classname="com.ata.stepthree.ShopRunnerStepThreeIntegrationTest" time="0.002"/>
+  <testcase name="[4] Boat Neck, Boat Neck was found and its product id is 3" classname="com.ata.stepthree.ShopRunnerStepThreeIntegrationTest" time="0.001"/>
+  <testcase name="[5] Tank Top, Tank Top was found and its product id is 4" classname="com.ata.stepthree.ShopRunnerStepThreeIntegrationTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
