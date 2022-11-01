@@ -5,9 +5,11 @@ import java.util.ArrayList;
 public class Shop{
    private String name;
    private ArrayList<Product> products;
+   private Cart cart;
     
     //constructors
-    public Shop (ArrayList<Product> products){
+    public Shop (String name, ArrayList<Product> products){
+        this.name = name;
         this.products = products;
     }
     
@@ -36,6 +38,9 @@ public class Shop{
         } return result;
 
 
+    }
+    public Product getProductByID(int id){
+        return products.get(id);
     }
     
     

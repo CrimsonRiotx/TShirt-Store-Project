@@ -29,7 +29,7 @@ public class ShopRunner {
         
         //Product[] products = new Product[] {crewNeck, vNeck, polo, boatNeck, tankTop};
         ArrayList<Product> products = new ArrayList<Product>(Arrays.asList(crewNeck, vNeck, polo, boatNeck, tankTop));
-        Shop myShop = new Shop(products);
+        Shop myShop = new Shop("Sam's T-shirt Shop",products);
         
         Menu menu = new Menu(new Scanner(new InputStreamReader(System.in, Charset.forName("UTF-8"))), myShop);
         menu.greet();

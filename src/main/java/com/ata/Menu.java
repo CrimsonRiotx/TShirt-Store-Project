@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Menu {
     private String[] menuOptions = {"Exit", "List Products", "Buy Product", "Find Product", "Show Cart", "Checkout"};
-    //private String[] products = {"Crew Neck", "V-Neck", "Polo", "Boat Neck", "Tank Top"};
+    private Cart cart;
     private Scanner scanner;
     public Shop shop;
 
@@ -42,6 +42,18 @@ public class Menu {
             shop.printProducts();
             executeMenu();
         }
+        
+        if(nextInt == 2){
+            System.out.println("Please enter the ID of the product you would like to purchase: ");
+            int idSearch = getNextIntFromUser();
+            if(idSearch < 0 || idSearch > 5){
+                System.out.println("That item ID is invalid and could not be added to the cart.");
+            } else {
+            Product p = shop.getProductByID(idSearch);
+            cart.addItem(p);
+           }
+        }
+        
         if(nextInt == 3){
             System.out.println("Enter the item to search for:");
             String itemToFind = getNextStringLineFromUser();
@@ -51,6 +63,11 @@ public class Menu {
             }else  System.out.println(itemToFind + " was found and its product id is " + shop.findProducts(itemToFind));
             executeMenu();
         }
+        
+        if(nextInt == 4){
+            cart.showDetails();
+        }
+        
         if(nextInt == 0){
             exit();
         }
